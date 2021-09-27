@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import React from 'react';
-import {View, Image, Pressable} from 'react-native';
+import {View, Image, Pressable, StyleSheet} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import HeaderWithCloseButton from '../../components/HeaderWithCloseButton';
 import {Lock} from '../../components/Icon/Expensicons';
@@ -180,15 +180,18 @@ class BankAccountStep extends React.Component {
                     <>
                         <View style={[styles.flex1, styles.mh5, styles.mt5]}>
                             <View style={[styles.flexRow, styles.justifyContentBetween, styles.mb5]}>
-                                <Text style={[styles.textXLarge]}>
+                                <Text style={[
+                                    styles.textXLarge,
+                                    this.props.isSmallScreenWidth || this.props.isMediumScreenWidth ? styles.flex1 : undefined,
+                                ]}>
                                     {this.props.translate('bankAccount.subtitle')}
                                 </Text>
                                 {this.props.isSmallScreenWidth || this.props.isMediumScreenWidth
                                     ? (
-                                        <HeroCardWebImage />
+                                        <HeroCardMobileImage style={StyleSheet.flatten([styles.w50, styles.h100])} />
                                     )
                                     : (
-                                        <HeroCardMobileImage />
+                                        <HeroCardWebImage />
                                     )
                                 }
                             </View>
