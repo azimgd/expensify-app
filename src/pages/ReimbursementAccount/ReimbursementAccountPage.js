@@ -179,7 +179,7 @@ class ReimbursementAccountPage extends React.Component {
             return (
                 <ScreenWrapper>
                     <HeaderWithCloseButton
-                        title={this.props.translate('bankAccount.connectBankAccount')}
+                        title={this.props.translate('bankAccount.headerTitle')}
                         onCloseButtonPress={Navigation.dismissModal}
                     />
                     {errorComponent}

@@ -19,6 +19,8 @@ import withLocalize, {withLocalizePropTypes} from '../../components/withLocalize
 import exampleCheckImage from '../../../assets/images/example-check-image.png';
 import Text from '../../components/Text';
 import ExpensiTextInput from '../../components/ExpensiTextInput';
+import Button from '../../components/Button';
+import FixedFooter from '../../components/FixedFooter';
 import {
     setBankAccountFormValidationErrors,
     setBankAccountSubStep,
@@ -167,7 +169,7 @@ class BankAccountStep extends React.Component {
         return (
             <View style={[styles.flex1, styles.justifyContentBetween]}>
                 <HeaderWithCloseButton
-                    title={this.props.translate('bankAccount.connectBankAccount')}
+                    title={this.props.translate('bankAccount.headerTitle')}
                     onCloseButtonPress={Navigation.dismissModal}
                     onBackButtonPress={() => setBankAccountSubStep(null)}
                     shouldShowBackButton={Boolean(subStep)}
@@ -176,7 +178,10 @@ class BankAccountStep extends React.Component {
                     <>
                         <View style={[styles.flex1]}>
                             <Text style={[styles.mh5, styles.mb5]}>
-                                {this.props.translate('bankAccount.toGetStarted')}
+                                {this.props.translate('bankAccount.subtitle')}
+                            </Text>
+                            <Text style={[styles.mh5, styles.mb5]}>
+                                {this.props.translate('bankAccount.description')}
                             </Text>
                             <MenuItem
                                 icon={Bank}
@@ -185,11 +190,6 @@ class BankAccountStep extends React.Component {
                                 disabled={this.props.isPlaidDisabled}
                                 shouldShowRightIcon
                             />
-                            {this.props.isPlaidDisabled && (
-                                <Text style={[styles.formError, styles.mh5]}>
-                                    {this.props.translate('bankAccount.error.tooManyAttempts')}
-                                </Text>
-                            )}
                             <MenuItem
                                 icon={Paycheck}
                                 title={this.props.translate('bankAccount.connectManually')}
@@ -213,6 +213,27 @@ class BankAccountStep extends React.Component {
                                 </View>
                             </View>
                         </View>
+                        <FixedFooter>
+                            {this.props.isPlaidDisabled && (
+                                <Text style={[styles.formError, styles.pb2]}>
+                                    {this.props.translate('bankAccount.error.tooManyAttempts')}
+                                </Text>
+                            )}
+                            <Button
+                                success
+                                onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID)}
+                                isDisabled={this.props.isPlaidDisabled}
+                                style={[styles.w100]}
+                                text={this.props.translate('bankAccount.connectWithPlaid')}
+                            />
+                            <Text
+                                style={[styles.pt3, styles.textLabelSupporting, styles.alignSelfCenter]}
+                                onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.MANUAL)}
+                            >
+                                {'Or connect manually'}
+                            </Text>
+                        </FixedFooter>
+
                     </>
                 )}
                 {subStep === CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID && (
