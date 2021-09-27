@@ -1,12 +1,9 @@
 import _ from 'underscore';
 import React from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, Pressable} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import HeaderWithCloseButton from '../../components/HeaderWithCloseButton';
-import MenuItem from '../../components/MenuItem';
-import {
-    Paycheck, Bank, Lock,
-} from '../../components/Icon/Expensicons';
+import {Lock} from '../../components/Icon/Expensicons';
 import styles from '../../styles/styles';
 import TextLink from '../../components/TextLink';
 import Icon from '../../components/Icon';
@@ -33,6 +30,10 @@ import compose from '../../libs/compose';
 import * as ReimbursementAccountUtils from '../../libs/ReimbursementAccountUtils';
 import ReimbursementAccountForm from './ReimbursementAccountForm';
 import reimbursementAccountPropTypes from './reimbursementAccountPropTypes';
+import withWindowDimensions, {windowDimensionsPropTypes} from '../../components/withWindowDimensions';
+
+import HeroCardWebImage from '../../../assets/images/cascading-cards-web.svg';
+import HeroCardMobileImage from '../../../assets/images/cascading-cards-mobile.svg';
 
 const propTypes = {
     /** Bank account currently in setup */
@@ -40,6 +41,7 @@ const propTypes = {
     reimbursementAccount: reimbursementAccountPropTypes.isRequired,
 
     ...withLocalizePropTypes,
+    ...windowDimensionsPropTypes,
 };
 
 class BankAccountStep extends React.Component {
@@ -176,27 +178,24 @@ class BankAccountStep extends React.Component {
                 />
                 {!subStep && (
                     <>
-                        <View style={[styles.flex1]}>
-                            <Text style={[styles.mh5, styles.mb5]}>
-                                {this.props.translate('bankAccount.subtitle')}
-                            </Text>
-                            <Text style={[styles.mh5, styles.mb5]}>
+                        <View style={[styles.flex1, styles.mh5, styles.mt5]}>
+                            <View style={[styles.flexRow, styles.justifyContentBetween, styles.mb5]}>
+                                <Text style={[styles.textXLarge]}>
+                                    {this.props.translate('bankAccount.subtitle')}
+                                </Text>
+                                {this.props.isSmallScreenWidth || this.props.isMediumScreenWidth
+                                    ? (
+                                        <HeroCardWebImage />
+                                    )
+                                    : (
+                                        <HeroCardMobileImage />
+                                    )
+                                }
+                            </View>
+                            <Text style={[styles.mb5]}>
                                 {this.props.translate('bankAccount.description')}
                             </Text>
-                            <MenuItem
-                                icon={Bank}
-                                title={this.props.translate('bankAccount.logIntoYourBank')}
-                                onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID)}
-                                disabled={this.props.isPlaidDisabled}
-                                shouldShowRightIcon
-                            />
-                            <MenuItem
-                                icon={Paycheck}
-                                title={this.props.translate('bankAccount.connectManually')}
-                                onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.MANUAL)}
-                                shouldShowRightIcon
-                            />
-                            <View style={[styles.m5, styles.flexRow, styles.justifyContentBetween]}>
+                            <View style={[styles.flexRow, styles.justifyContentBetween]}>
                                 <TextLink href="https://use.expensify.com/privacy">
                                     {this.props.translate('common.privacy')}
                                 </TextLink>
@@ -226,14 +225,17 @@ class BankAccountStep extends React.Component {
                                 style={[styles.w100]}
                                 text={this.props.translate('bankAccount.connectWithPlaid')}
                             />
-                            <Text
-                                style={[styles.pt3, styles.textLabelSupporting, styles.alignSelfCenter]}
+                            <Pressable
                                 onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.MANUAL)}
+                                accessibilityRole="button"
                             >
-                                {'Or connect manually'}
-                            </Text>
+                                {({hovered, pressed}) => (
+                                    <Text style={[styles.pt3, styles.textLabelSupporting, styles.alignSelfCenter, (hovered || pressed) ? styles.linkMutedHovered : undefined]}>
+                                        {this.props.translate('bankAccount.connectManually')}
+                                    </Text>
+                                )}
+                            </Pressable>
                         </FixedFooter>
-
                     </>
                 )}
                 {subStep === CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID && (
@@ -299,6 +301,7 @@ class BankAccountStep extends React.Component {
 BankAccountStep.propTypes = propTypes;
 export default compose(
     withLocalize,
+    withWindowDimensions,
     withOnyx({
         reimbursementAccount: {
             key: ONYXKEYS.REIMBURSEMENT_ACCOUNT,
