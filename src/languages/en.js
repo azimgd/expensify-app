@@ -376,7 +376,7 @@ export default {
     bankAccount: {
         accountNumber: 'Account number',
         routingNumber: 'Routing number',
-        addBankAccount: 'Add bank account',
+        connectBankAccount: 'Connect your bank account',
         chooseAnAccount: 'Choose an account',
         logIntoYourBank: 'Log into your bank',
         connectManually: 'Connect manually',
