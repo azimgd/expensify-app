@@ -167,7 +167,7 @@ class BankAccountStep extends React.Component {
         return (
             <View style={[styles.flex1, styles.justifyContentBetween]}>
                 <HeaderWithCloseButton
-                    title={this.props.translate('bankAccount.addBankAccount')}
+                    title={this.props.translate('bankAccount.connectBankAccount')}
                     onCloseButtonPress={Navigation.dismissModal}
                     onBackButtonPress={() => setBankAccountSubStep(null)}
                     shouldShowBackButton={Boolean(subStep)}
