@@ -373,6 +373,7 @@ export default {
         passwordNotSet: 'We were unable to set your new password correctly.',
         accountNotValidated: 'We were unable to validate your account. The validation code may have expired.',
     },
+    stepCounter: ({step, total}) => `Step ${step} of ${total}`,
     bankAccount: {
         headerTitle: 'Connect your bank account',
         subtitle: 'Get ready for self-driving payments!',
@@ -385,6 +386,7 @@ export default {
         yourDataIsSecure: 'Your data is secure',
         plaidBodyCopy: 'Give your employees an easier way to pay - and get paid back - for company expenses.',
         checkHelpLine: 'Your routing number and account number can be found on a check for the account.',
+        validateAccountError: 'In order to finish setting up your bank account, you must validate your account. Please check your email to validate your account, and return here to finish up!',
         hasPhoneLoginError: 'To add a verified bank account please ensure your primary login is a valid email and try again. You can add your phone number as a secondary login.',
         hasBeenThrottledError: ({fromNow}) => `For security reasons, we're taking a break from bank account setup so you can double-check your company information. Please try again ${fromNow}. Sorry!`,
         buttonConfirm: 'Got it',

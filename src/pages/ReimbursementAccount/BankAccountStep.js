@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import HeaderWithCloseButton from '../../components/HeaderWithCloseButton';
-import {Lock} from '../../components/Icon/Expensicons';
+import {Exclamation} from '../../components/Icon/Expensicons';
 import styles from '../../styles/styles';
 import TextLink from '../../components/TextLink';
 import Icon from '../../components/Icon';
@@ -174,6 +174,7 @@ class BankAccountStep extends React.Component {
             <View style={[styles.flex1, styles.justifyContentBetween]}>
                 <HeaderWithCloseButton
                     title={this.props.translate('bankAccount.headerTitle')}
+                    stepCounter={this.state.bankAccountAddMethod && {step: 1, total: 5}}
                     onCloseButtonPress={Navigation.dismissModal}
                     onBackButtonPress={() => setBankAccountSubStep(null)}
                     shouldShowBackButton={Boolean(subStep)}
@@ -200,22 +201,6 @@ class BankAccountStep extends React.Component {
                             <Text style={[styles.mb5]}>
                                 {this.props.translate('bankAccount.description')}
                             </Text>
-                            <View style={[styles.flexRow, styles.justifyContentBetween]}>
-                                <TextLink href="https://use.expensify.com/privacy">
-                                    {this.props.translate('common.privacy')}
-                                </TextLink>
-                                <View style={[styles.flexRow, styles.alignItemsCenter]}>
-                                    <TextLink
-                                        // eslint-disable-next-line max-len
-                                        href="https://community.expensify.com/discussion/5677/deep-dive-how-expensify-protects-your-information/"
-                                    >
-                                        {this.props.translate('bankAccount.yourDataIsSecure')}
-                                    </TextLink>
-                                    <View style={[styles.ml1]}>
-                                        <Icon src={Lock} fill={colors.blue} />
-                                    </View>
-                                </View>
-                            </View>
                         </View>
                         <FixedFooter>
                             {this.props.isPlaidDisabled && (
@@ -223,16 +208,27 @@ class BankAccountStep extends React.Component {
                                     {this.props.translate('bankAccount.error.tooManyAttempts')}
                                 </Text>
                             )}
+                            {!this.props.user.validated && (
+                                <View style={[styles.flexRow, styles.alignItemsCenter, styles.mb4]}>
+                                    <Text style={[styles.mutedTextLabel, styles.mr4]}>
+                                        <Icon src={Exclamation} fill={colors.red} />
+                                    </Text>
+                                    <Text style={styles.mutedTextLabel}>
+                                        {this.props.translate('bankAccount.validateAccountError')}
+                                    </Text>
+                                </View>
+                            )}
                             <Button
                                 success
                                 onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID)}
-                                isDisabled={this.props.isPlaidDisabled}
+                                isDisabled={this.props.isPlaidDisabled || !this.props.user.validated}
                                 style={[styles.w100]}
                                 text={this.props.translate('bankAccount.connectWithPlaid')}
                             />
                             <Pressable
                                 onPress={() => setBankAccountSubStep(CONST.BANK_ACCOUNT.SETUP_TYPE.MANUAL)}
                                 accessibilityRole="button"
+                                disabled={!this.props.user.validated}
                             >
                                 {({hovered, pressed}) => (
                                     <Text style={[styles.pt3, styles.textLabelSupporting, styles.alignSelfCenter, (hovered || pressed) ? styles.linkMutedHovered : undefined]}>
@@ -313,6 +309,9 @@ export default compose(
         },
         reimbursementAccountDraft: {
             key: ONYXKEYS.REIMBURSEMENT_ACCOUNT_DRAFT,
+        },
+        user: {
+            key: ONYXKEYS.USER,
         },
     }),
 )(BankAccountStep);
