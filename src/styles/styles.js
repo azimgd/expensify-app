@@ -1006,7 +1006,7 @@ const styles = {
 
     chatContentScrollView: {
         flexGrow: 1,
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
         paddingVertical: 16,
     },
 
