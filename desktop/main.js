@@ -5,6 +5,7 @@ const {
     MenuItem,
     shell,
     ipcMain,
+    safeStorage,
 } = require('electron');
 const _ = require('underscore');
 const serve = require('electron-serve');
@@ -303,6 +304,30 @@ const mainWindow = (() => {
             // back into focus if it's minimized or hidden.
             ipcMain.on(ELECTRON_EVENTS.REQUEST_FOCUS_APP, () => {
                 browserWindow.show();
+            });
+
+            ipcMain.on(ELECTRON_EVENTS.REQUEST_SECURE_CREDENTIALS, (event, credential) => {
+                try {
+                    // eslint-disable-next-line no-param-reassign
+                    event.returnValue = safeStorage.encryptString(credential).toJSON();
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
+                    // eslint-disable-next-line no-param-reassign
+                    event.returnValue = {};
+                }
+            });
+
+            ipcMain.on(ELECTRON_EVENTS.PERSIST_SECURE_CREDENTIALS, (event, credential) => {
+                try {
+                    // eslint-disable-next-line no-param-reassign
+                    event.returnValue = safeStorage.decryptString(Buffer.from(credential));
+                } catch (error) {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
+                    // eslint-disable-next-line no-param-reassign
+                    event.returnValue = {};
+                }
             });
 
             // Listen to badge updater event emitted by the render process
