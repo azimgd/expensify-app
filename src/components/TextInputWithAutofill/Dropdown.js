@@ -19,9 +19,11 @@ const propTypes = {
     onChangeText: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
     nativeID: PropTypes.string.isRequired,
+    autoCompleteType: PropTypes.string,
 };
 
 const defaultProps = {
+    autoCompleteType: null,
 };
 
 class Dropdown extends React.Component {
@@ -44,7 +46,7 @@ class Dropdown extends React.Component {
          * This will be removed once [save-password] feature is implemented
          */
         SecureCredentials.storeEncryptedCredentials([
-            {username: 'me@azimgd.com', password: '123123123'},
+            {username: 'me@azimgd.com', password: '!Testing1234!'},
             {username: 'john-doe@gmail.com', password: '321321321'},
             {username: 'bill@gmail.com', password: 'asdasdasd'},
         ]);
@@ -106,6 +108,10 @@ class Dropdown extends React.Component {
     }
 
     render() {
+        if (!this.props.autoCompleteType) {
+            return this.props.children;
+        }
+
         const CustomTextInput = React.cloneElement(this.props.children, {onFocus: this.onFocus, onBlur: this.onBlur});
 
         const customStyle = {
