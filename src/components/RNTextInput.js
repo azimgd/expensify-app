@@ -3,6 +3,7 @@ import _ from 'underscore';
 // eslint-disable-next-line no-restricted-imports
 import {TextInput} from 'react-native';
 import PropTypes from 'prop-types';
+import Dropdown from './TextInputWithAutofill/Dropdown';
 
 const propTypes = {
     /** A ref to forward to the text input */
@@ -14,21 +15,24 @@ const defaultProps = {
 };
 
 const RNTextInput = props => (
-    <TextInput
-        ref={(ref) => {
-            if (!_.isFunction(props.forwardedRef)) {
-                return;
-            }
-            props.forwardedRef(ref);
-        }}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <Dropdown {...props}>
+        <TextInput
+            ref={(ref) => {
+                if (!_.isFunction(props.forwardedRef)) {
+                    return;
+                }
+                props.forwardedRef(ref);
+            }}
 
-        // By default, align input to the left to override right alignment in RTL mode which is not yet supported in the App.
-        // eslint-disable-next-line react/jsx-props-no-multi-spaces
-        textAlign="left"
+            // By default, align input to the left to override right alignment in RTL mode which is not yet supported in the App.
+            // eslint-disable-next-line react/jsx-props-no-multi-spaces
+            textAlign="left"
 
-        // eslint-disable-next-line
-        {...props}
-    />
+            // eslint-disable-next-line
+            {...props}
+        />
+    </Dropdown>
 );
 
 RNTextInput.propTypes = propTypes;
