@@ -2,6 +2,8 @@
  * This is a file containing constants for all the top level keys in our store
  */
 export default {
+    SECURE_CREDENTIALS: 'secureCredentials',
+
     // Holds information about the users account that is logging in
     ACCOUNT: 'account',
 

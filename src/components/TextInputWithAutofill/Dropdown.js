@@ -18,6 +18,7 @@ const propTypes = {
     onBlur: PropTypes.func.isRequired,
     onChangeText: PropTypes.func.isRequired,
     children: PropTypes.node.isRequired,
+    nativeID: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -37,6 +38,20 @@ class Dropdown extends React.Component {
         this.resetPositionOnBlur = this.resetPositionOnBlur.bind(this);
     }
 
+    componentDidMount() {
+        /**
+         * Change default credentials here, for demo purposes only.
+         * This will be removed once [save-password] feature is implemented
+         */
+        SecureCredentials.storeEncryptedCredentials([
+            {username: 'me@azimgd.com', password: '123123123'},
+            {username: 'john-doe@gmail.com', password: '321321321'},
+            {username: 'bill@gmail.com', password: 'asdasdasd'},
+        ]);
+
+        this.fetchSecureCredentials();
+    }
+
     onFocus(args) {
         if (!this.props.onFocus) {
             return;
@@ -49,9 +64,8 @@ class Dropdown extends React.Component {
         if (!this.props.onBlur) {
             return;
         }
-        this.fetchSecureCredentials();
         this.props.onBlur(args);
-        args.target.measure(this.resetPositionOnBlur);
+        // this.resetPositionOnBlur();
     }
 
     measurePositionOnFocus(x, y, width, height, pageX, pageY) {
@@ -60,34 +74,34 @@ class Dropdown extends React.Component {
         const absoluteLeft = pageX;
         const absoluteWidth = width;
 
-        this.setState({
+        this.setState(state => ({
+            ...state,
             position: {
                 top: absoluteTop + absoluteOffset,
                 left: absoluteLeft,
                 width: absoluteWidth,
             },
-        });
+        }));
     }
 
     handlePress(index) {
-        this.props.onChangeText(this.state.data[index].username);
+        this.props.onChangeText(this.state.data[index][this.props.nativeID]);
+        this.resetPositionOnBlur();
     }
 
     resetPositionOnBlur() {
-        // this.setState({position: null});
+        this.setState(state => ({
+            ...state,
+            position: null,
+        }));
     }
 
     fetchSecureCredentials() {
-        // storeEncryptedCredentials
-        console.log(SecureCredentials.fetchDecryptedCredentials());
+        const credentials = SecureCredentials.fetchDecryptedCredentials();
+
         this.setState(state => ({
             ...state,
-            data: [
-                {
-                    username: 'me@azimgd.com',
-                    password: '*********',
-                },
-            ],
+            data: credentials,
         }));
     }
 
@@ -101,6 +115,8 @@ class Dropdown extends React.Component {
             ...this.state.position,
         };
 
+        // console.log(this.state);
+
         return (
             <View>
                 {CustomTextInput}
@@ -111,7 +127,7 @@ class Dropdown extends React.Component {
                             <TouchableOpacity style={styles.item} onPress={() => this.handlePress(index)} key={index}>
                                 <Text style={{color: '#fff'}}>{item.username}</Text>
                                 <View style={{height: 6}} />
-                                <Text style={{color: '#fff'}}>{item.password}</Text>
+                                <Text style={{color: '#fff'}}>*********</Text>
                             </TouchableOpacity>
                         ))}
                     </View>

@@ -7,6 +7,9 @@ const ELECTRON_EVENTS = {
     UPDATE_DOWNLOADED: 'update-downloaded',
     FOCUS: 'focus',
     BLUR: 'blur',
+    REQUEST_SECURE_CREDENTIALS: 'request-secure-credentials',
+    RECEIVE_SECURE_CREDENTIALS: 'receive-secure-credentials',
+    PERSIST_SECURE_CREDENTIALS: 'persist-secure-credentials',
 };
 
 module.exports = ELECTRON_EVENTS;

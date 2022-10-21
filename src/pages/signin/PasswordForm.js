@@ -158,7 +158,7 @@ class PasswordForm extends React.Component {
                         onSubmitEditing={this.validateAndSubmitForm}
                         blurOnSubmit={false}
                     />
-                    <View style={[styles.changeExpensifyLoginLinkContainer]}>
+                    <View style={[styles.changeExpensifyLoginLinkContainer, {zIndex: -1}]}>
                         <TouchableOpacity
                             style={[styles.mt2]}
                             onPress={this.resetPassword}
@@ -172,7 +172,7 @@ class PasswordForm extends React.Component {
                 </View>
 
                 {this.props.account.requiresTwoFactorAuth && (
-                    <View style={[styles.mv3]}>
+                    <View style={[styles.mv3, {zIndex: -1}]}>
                         <TextInput
                             ref={el => this.input2FA = el}
                             label={this.props.translate('passwordForm.twoFactorCode')}
@@ -199,7 +199,7 @@ class PasswordForm extends React.Component {
                         {this.props.translate(this.state.formError)}
                     </Text>
                 )}
-                <View>
+                <View style={{zIndex: -1}}>
                     <Button
                         isDisabled={this.props.network.isOffline}
                         success
